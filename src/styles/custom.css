@@ -1,0 +1,67 @@
+::-webkit-scrollbar {
+  display: none;
+}
+
+.animation-modal-in {
+  animation: ModalIn 0.2s forwards;
+}
+.animation-modal-out {
+  animation: ModalOut 0.2s forwards;
+}
+.animation-drawer-in {
+  animation: DrawerIn 0.2s forwards;
+}
+.animation-drawer-out {
+  animation: DrawerOut 0.2s forwards;
+}
+
+body.no-scroll {
+  overflow: hidden;
+}
+
+@keyframes ModalIn {
+  0% {
+    transform: scale(0);
+  }
+  50% {
+    transform: scale((0.5));
+  }
+  100% {
+    transform: scale((1));
+  }
+}
+@keyframes ModalOut {
+  0% {
+    transform: scale((1));
+  }
+  50% {
+    transform: scale((0.5));
+  }
+  100% {
+    transform: scale(0);
+  }
+}
+
+@keyframes drawerIn {
+  0% {
+    transform: translateX(500px);
+  }
+  50% {
+    transform: translateX((-50px));
+  }
+  100% {
+    transform: translateX(0px);
+  }
+}
+
+@keyframes DrawerOut {
+  0% {
+    transform: translateX(0px);
+  }
+  50% {
+    transform: translateX((-50px));
+  }
+  100% {
+    transform: translateX(500px);
+  }
+}
