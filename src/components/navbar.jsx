@@ -120,7 +120,7 @@ export default function Navbar({ title, icons, position, hidden }) {
         />
         <main className="flex-1 overflow-scroll p-5">
           <section className="flex flex-col mb-5 divide-slate-700 divide-y gap-y-5 bg-primary w-full rounded-2xl p-5 text-secondary">
-            <div className="flex items-center w-full h-20 justify-between">
+            <NavLink className="flex items-center w-full h-20 justify-between">
               <div className="flex items-center gap-3">
                 <div className="rounded-full bg-secondary text-primary p-2.5 flex items-center justify-center">
                   <User size={28} className="text-primary" />
@@ -128,8 +128,11 @@ export default function Navbar({ title, icons, position, hidden }) {
                 <h1 className="font-medium text-xl">Profile</h1>
               </div>
               <ChevronRight size={24} />
-            </div>
-            <div className="flex items-center w-full h-20 justify-between">
+            </NavLink>
+            <NavLink
+              className="flex items-center w-full h-20 justify-between"
+              to={"/Wallet"}
+            >
               <div className="flex items-center gap-3">
                 <div className="rounded-full bg-secondary text-primary p-2.5 flex items-center justify-center">
                   <Wallet size={28} className="text-primary" />
@@ -137,8 +140,8 @@ export default function Navbar({ title, icons, position, hidden }) {
                 <h1 className="font-medium text-xl">My Wallet</h1>
               </div>
               <ChevronRight size={24} />
-            </div>
-            <div className="flex items-center w-full h-20 justify-between">
+            </NavLink>
+            <NavLink className="flex items-center w-full h-20 justify-between">
               <div className="flex items-center gap-3">
                 <div className="rounded-full bg-secondary text-primary p-2.5 flex items-center justify-center">
                   <Translate size={28} className="text-primary" />
@@ -146,8 +149,8 @@ export default function Navbar({ title, icons, position, hidden }) {
                 <h1 className="font-medium text-xl">Language</h1>
               </div>
               <ChevronRight size={24} />
-            </div>
-            <div className="flex items-center w-full h-20 justify-between">
+            </NavLink>
+            <NavLink className="flex items-center w-full h-20 justify-between">
               <div className="flex items-center gap-3">
                 <div className="rounded-full bg-secondary text-primary p-2.5 flex items-center justify-center">
                   <SwapVertical size={28} className="text-primary" />
@@ -155,10 +158,10 @@ export default function Navbar({ title, icons, position, hidden }) {
                 <h1 className="font-medium text-xl">Import & Export</h1>
               </div>
               <ChevronRight size={24} />
-            </div>
+            </NavLink>
           </section>
           <section className="flex flex-col divide-slate-700 divide-y gap-y-6 bg-primary w-full rounded-2xl p-5 text-secondary">
-            <div className="flex items-center w-full h-20 justify-between">
+            <NavLink className="flex items-center w-full h-20 justify-between">
               <div className="flex items-center gap-3">
                 <div className="rounded-full bg-secondary text-primary p-2.5 flex items-center justify-center">
                   <InfoCircle size={28} className="text-primary" />
@@ -166,8 +169,8 @@ export default function Navbar({ title, icons, position, hidden }) {
                 <h1 className="font-medium text-xl">About Us</h1>
               </div>
               <ChevronRight size={24} />
-            </div>
-            <div className="flex items-center w-full h-20 justify-between">
+            </NavLink>
+            <NavLink className="flex items-center w-full h-20 justify-between">
               <div className="flex items-center gap-3">
                 <div className="rounded-full bg-secondary text-primary p-2.5 flex items-center justify-center">
                   <CustomerSupport size={28} className="text-primary" />
@@ -175,8 +178,8 @@ export default function Navbar({ title, icons, position, hidden }) {
                 <h1 className="font-medium text-xl">Help Center</h1>
               </div>
               <ChevronRight size={24} />
-            </div>
-            <div className="flex items-center w-full h-20 justify-between">
+            </NavLink>
+            <NavLink className="flex items-center w-full h-20 justify-between">
               <div className="flex items-center gap-3">
                 <div className="rounded-full bg-red-500/10 p-2.5 flex items-center justify-center">
                   <Database size={28} className="text-red-500" />
@@ -186,7 +189,7 @@ export default function Navbar({ title, icons, position, hidden }) {
                 </h1>
               </div>
               <ChevronRight size={24} />
-            </div>
+            </NavLink>
           </section>
         </main>
       </Modal>

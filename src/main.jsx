@@ -7,6 +7,12 @@ import App from "./components/layout/app.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
 import Transaction from "./pages/Transaction.jsx";
 import Analytics from "./pages/Analytics.jsx";
+import { registerSW } from "virtual:pwa-register";
+
+registerSW();
+
+// sub pages
+import Wallet from "./pages/subpages/Wallet.jsx";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -23,6 +29,10 @@ const router = createBrowserRouter([
       {
         path: "/Analytics",
         element: <Analytics />,
+      },
+      {
+        path: "/Wallet",
+        element: <Wallet />,
       },
     ],
   },
