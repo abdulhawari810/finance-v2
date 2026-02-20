@@ -2,7 +2,18 @@ import Navbar from "../../components/navbar";
 import Modal from "../../components/modal";
 import SelectForm from "../../components/select";
 
-import { ArrowLeft, CloseCircle, PlusCircle } from "griddy-icons";
+import { v4 as uuidv4 } from "uuid";
+
+import { ProviderIcons } from "../../utils/icons";
+import { getImagesBank } from "../../utils/image";
+
+import {
+  ArrowLeft,
+  ChevronLeft,
+  CloseCircle,
+  MoreHorizontal,
+  PlusCircle,
+} from "griddy-icons";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
@@ -11,6 +22,8 @@ export default function Wallet() {
   const [OpenModal, setOpenModal] = useState(false);
   const [TypeModal, setTypeModal] = useState("");
 
+  const [ActiveMenu, setActiveMenu] = useState(null);
+
   const nav = useNavigate();
 
   const [type, setType] = useState(null);
@@ -18,6 +31,10 @@ export default function Wallet() {
   const [Fullname, setFullname] = useState("");
   const [cardNumber, setCardNumber] = useState(0);
   const [Amount, setAmount] = useState(0);
+
+  const [Accounts, setAccounts] = useState(
+    JSON.parse(localStorage.getItem("accounts")) || [],
+  );
 
   const typeOptions = [
     { value: "bank", label: "Bank Indonesia" },
@@ -52,18 +69,32 @@ export default function Wallet() {
     if (provider === null) return toast.error("Provider Name is required!");
     if (cardNumber === 0) return toast.error("Card Number is required!");
 
+    const existing = existingAccount?.find(
+      (item) =>
+        item.fullname === Fullname &&
+        item.card_number === cardNumber &&
+        item.provider.value === provider.value &&
+        item.type.value === type.value,
+    );
+
+    if (existing) return toast.error("Rekening ini sudah ditambahkan!");
+
+    const isDefault = existingAccount?.length === 0 ? true : false;
+
     const formInput = {
+      id: uuidv4(),
       fullname: Fullname,
       card_number: cardNumber,
       balance: Amount,
       type,
       provider,
       is_active: true,
-      is_default: existingAccount ? true : false,
+      is_default: isDefault,
       createdAt: new Date().toISOString(),
     };
-    localStorage.setItem("accounts", JSON.stringify(formInput));
-
+    const updateAccounts = [...existingAccount, formInput];
+    localStorage.setItem("accounts", JSON.stringify(updateAccounts));
+    setAccounts(updateAccounts);
     toast.success("Wallet Added Succesfully");
     setOpenModal(false);
     setTypeModal("");
@@ -73,30 +104,118 @@ export default function Wallet() {
     setCardNumber(0);
     setAmount(0);
   };
+
+  const handlePaymentDefault = (id) => {
+    const existingAccount = JSON.parse(localStorage.getItem("accounts")) || [];
+
+    const updateData = existingAccount?.map((item) => ({
+      ...item,
+      is_default: item.id === id,
+    }));
+
+    localStorage.setItem("accounts", JSON.stringify(updateData));
+    setAccounts(updateData);
+  };
+
+  const handlePaymentActive = (id) => {
+    const existingAccount = JSON.parse(localStorage.getItem("accounts")) || [];
+
+    const updateData = existingAccount?.map((item) =>
+      item.id === id
+        ? {
+            ...item,
+            is_active: !item.is_active,
+          }
+        : item,
+    );
+
+    localStorage.setItem("accounts", JSON.stringify(updateData));
+    setAccounts(updateData);
+  };
+  // console.log(Accounts);
   return (
-    <>
+    <main className="w-full h-screen">
       <Navbar
         title="My Wallet"
         hidden={true}
         position={"left"}
         icons={
-          <ArrowLeft
+          <ChevronLeft
             className="absolute left-2.5"
-            size={32}
+            size={24}
             onClick={() => nav(-1)}
           />
         }
       />
-      <main>
+      <main className="flex-1 inset-0 gap-5">
         <section
-          className="w-full flex items-center justify-between p-5 rounded-2xl bg-primary text-secondary h-24"
+          className="w-full mb-5 flex items-center justify-between p-5 rounded-2xl bg-primary text-slate-100 h-24"
           onClick={() => {
             setOpenModal(true);
             setTypeModal("add_wallet");
           }}
         >
-          <h1>Add New Wallet</h1>
+          <h1 className="text-lg font-b">Add New Wallet</h1>
           <PlusCircle size={24} />
+        </section>
+        <section className="flex flex-col gap-5">
+          {Array.isArray(Accounts) &&
+            Accounts.map((item, i) => {
+              return (
+                <section
+                  className="w-full bg-primary rounded-xl text-slate-300 p-4 flex items-center justify-between"
+                  key={item.id}
+                >
+                  <div className="flex items-center gap-6 w-[90%]">
+                    <img
+                      src={getImagesBank(item.type.value, item.provider.value)}
+                      alt="BRI"
+                      className="w-12.5 h-12.5 object-cover rounded-xl"
+                    />
+                    <div className="flex flex-col w-full gap-2">
+                      <h1 className="font-b text-lg">
+                        {item.provider.label} {item.type.label}
+                      </h1>
+                      <h4 className="font-m text-md truncate w-[70%]">
+                        {item.fullname}
+                      </h4>
+                      <h4 className="font-m text-md">{item.card_number}</h4>
+                    </div>
+                  </div>
+                  <div
+                    className="grouping relative"
+                    onClick={() =>
+                      setActiveMenu(ActiveMenu === item.id ? null : item.id)
+                    }
+                  >
+                    <div
+                      className={`${ActiveMenu === item.id ? "bg-slate-100 text-primary" : "bg-transparent text-slate-100"} p-2.5 rounded-lg flex items-center justify-center`}
+                    >
+                      <MoreHorizontal size={24} />
+                    </div>
+
+                    <div
+                      className={`absolute right-0 top-16 w-50 p-2.5 z-50 gap-3 flex flex-col rounded-2xl text-primary/80 bg-slate-100 drop-shadow-2xl ${ActiveMenu === item.id ? "scale-100 animation-bounce" : "scale-0"}`}
+                    >
+                      <button
+                        type="button"
+                        className={`w-full h-12 ${item.is_active ? "bg-primary text-white" : "bg-slate-100 text-primary"} text-lg rounded-lg`}
+                        onClick={() => handlePaymentActive(item.id)}
+                      >
+                        {item.is_active ? "Aktif" : "Tidak Aktif"}
+                      </button>
+                      <button
+                        type="button"
+                        className={`w-full h-12 text-lg ${item.is_default ? "bg-primary text-white" : "bg-slate-100 text-primary"} rounded-lg`}
+                        onClick={() => handlePaymentDefault(item.id)}
+                      >
+                        Jadikan Default
+                      </button>
+                    </div>
+                  </div>
+                </section>
+              );
+            })}
         </section>
       </main>
       <Modal
@@ -104,7 +223,7 @@ export default function Wallet() {
         isOpen={!OpenModal}
       >
         <form
-          className="w-full relative p-5 bg-slate-300 h-full rounded-2xl overflow-y-scroll"
+          className="w-full relative p-5 bg-slate-300 rounded-2xl overflow-y-scroll"
           onSubmit={handleSubmit}
         >
           <h1 className="font-b text-2xl text-center">Add new wallet</h1>
@@ -196,6 +315,6 @@ export default function Wallet() {
           </button>
         </form>
       </Modal>
-    </>
+    </main>
   );
 }

@@ -61,7 +61,7 @@ export default function SelectForm({
 
   return (
     <>
-      <h1 className="text-lg font-m mt-2.5">{title}</h1>
+      <h1 className="text-lg font-b mt-2.5">{title}</h1>
       <Select
         styles={customStyles}
         options={options}

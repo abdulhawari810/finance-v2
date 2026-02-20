@@ -7,6 +7,7 @@ import App from "./components/layout/app.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
 import Transaction from "./pages/Transaction.jsx";
 import Analytics from "./pages/Analytics.jsx";
+import Settings from "./pages/Settings.jsx";
 import { registerSW } from "virtual:pwa-register";
 
 registerSW();
@@ -31,7 +32,11 @@ const router = createBrowserRouter([
         element: <Analytics />,
       },
       {
-        path: "/Wallet",
+        path: "/Settings",
+        element: <Settings />,
+      },
+      {
+        path: "/Settings/Wallet",
         element: <Wallet />,
       },
     ],

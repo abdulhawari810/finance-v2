@@ -1,8 +1,17 @@
 import Navbar from "../components/navbar";
 import Card from "../components/card";
 import Modal from "../components/modal";
-import { getIcons } from "../utils/icons";
-import { Bank, ChevronLeft, ChevronRightSmall } from "griddy-icons";
+import SelectForm from "../components/select";
+import SelectDatePicker from "../components/datepicker";
+
+import { getIcons, ProviderIcons } from "../utils/icons";
+import {
+  Bank,
+  ChevronLeft,
+  ChevronRightSmall,
+  CloseCircle,
+  MoreHorizontal,
+} from "griddy-icons";
 
 import {
   LineChart,
@@ -27,6 +36,10 @@ export default function Dashboard() {
 
   const [OpenModal, setOpenModal] = useState(false);
   const [ModalType, setModalType] = useState("");
+  const [OpenSubModal, setOpenSubModal] = useState(false);
+  const [ActiveMenu, setActiveMenu] = useState(null);
+  const [category, setCategory] = useState("");
+  const [selectedDate, setSelectedDate] = useState(null);
 
   console.log(OpenModal);
 
@@ -38,6 +51,35 @@ export default function Dashboard() {
     { month: "Mei", income: 3500000 },
     { month: "Jun", income: 4200000 },
   ];
+
+  const dataCategory = [
+    {
+      value: "gaji",
+      label: "Salary",
+    },
+    {
+      value: "piutang",
+      label: "Piutang",
+    },
+    {
+      value: "kendaraan",
+      label: "Kendaraan",
+    },
+    {
+      value: "cicilan",
+      label: "Cicilan",
+    },
+  ];
+
+  const banks = [
+    { id: 1, name: "BRI", owner: "Abdul", number: "15151515" },
+    { id: 2, name: "BCA", owner: "Budi", number: "99999999" },
+  ];
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+  };
+
   return (
     <main className=" pb-27.5">
       <Navbar title={"Dashboard"} />
@@ -228,12 +270,12 @@ export default function Dashboard() {
       </div>
 
       <Modal
-        styles={`w-full inset-0 flex flex-col bg-secondary fixed top-0 left-0 z-100 ${OpenModal && ModalType === "income" ? "animation-modal-in scale-100" : "animation-modal-out scale-0"}`}
+        styles={`w-full inset-0 flex flex-col bg-slate-300 fixed top-0 left-0 z-100 ${OpenModal && ModalType === "income" ? "animation-modal-in scale-100" : "animation-modal-out scale-0"}`}
         isOpen={OpenModal}
       >
         <Header
-          styles="w-full shrink-0 sticky top-0 z-30 left-0 flex h-20 bg-primary text-secondary px-2.5 items-center justify-center relative"
-          title={"Uang Masuk"}
+          styles="w-full shrink-0 sticky top-0 z-30 left-0 flex h-20 bg-primary text-slate-100 px-2.5 items-center justify-center relative"
+          title={"Money Income"}
           icons={
             <ChevronLeft
               size={24}
@@ -246,10 +288,10 @@ export default function Dashboard() {
           }
         />
         <section className="flex-1 py-5 overflow-y-scroll">
-          <form className="flex flex-col px-2.5">
+          <form className="flex flex-col px-2.5" onSubmit={handleSubmit}>
             <Card
               styles={
-                "flex w-full flex items-center justify-between bg-primary text-secondary p-5 rounded-2xl"
+                "flex w-full flex items-center justify-between bg-primary text-slate-100 p-5 rounded-2xl"
               }
             >
               <div className="flex items-center gap-4">
@@ -260,46 +302,26 @@ export default function Dashboard() {
                   <span className="text-md">15151515</span>
                 </div>
               </div>
-              <button className="flex items-center justify-center">
+              <button
+                className="flex items-center justify-center"
+                onClick={() => setOpenSubModal(!OpenSubModal)}
+              >
                 <span>Change</span>
               </button>
             </Card>
 
-            <div class="flex flex-col gap-1 mt-5 w-full">
-              <label
-                for="category"
-                class="text-xs font-semibold text-primary uppercase tracking-wide"
-              >
-                Category
-              </label>
+            <SelectForm
+              title="Select Category"
+              options={dataCategory}
+              value={category}
+              onChange={setCategory}
+            />
 
-              <select
-                id="category"
-                class="w-full outline outline-slate-700 rounded-2xl px-4 py-3 text-sm
-            focus:outline-primary focus:ring-2 focus:ring-primary/30
-           transition-all duration-200"
-              >
-                <option value="">Select category</option>
-
-                <option value="salary">Salary</option>
-                <option value="bonus">Bonus</option>
-              </select>
-            </div>
-
-            <div className="flex flex-col gap-1 mt-5 w-full">
-              <label
-                htmlFor="date"
-                className="text-xs font-semibold peer-focus:text-primary peer-not-placeholder-shown:text-primary text-slate-700 uppercase tracking-wide"
-              >
-                Date
-              </label>
-
-              <input
-                type="date"
-                id="date"
-                className="w-full peer outline outline-slate-700 rounded-2xl px-4 py-3 text-sm
-               focus:outline-primary focus:ring-2 focus:ring-primary/30
-               transition-all duration-200"
+            <div className="mt-5 grid items-center grid-cols-2">
+              <h1 className="font-b text-lg w-full">Select Date</h1>
+              <SelectDatePicker
+                value={selectedDate}
+                onChange={setSelectedDate}
               />
             </div>
 
@@ -311,7 +333,7 @@ export default function Dashboard() {
               ></textarea>
               <label
                 htmlFor="note"
-                className="absolute text-slate-700 peer-focus:text-primary peer-not-placeholder-shown:text-primary text-lg font-bold left-5 top-5 peer-not-placeholder-shown:top-0 peer-not-placeholder-shown:-translate-y-3 peer-not-placeholder-shown:bg-secondary px-2 peer-not-placeholder-shown:text-sm peer-focus:top-0 peer-focus:-translate-y-3 peer-focus:bg-secondary peer-focus:text-sm"
+                className="absolute text-slate-700 peer-focus:text-primary peer-not-placeholder-shown:text-primary text-lg font-bold left-5 top-5 peer-not-placeholder-shown:top-0 peer-not-placeholder-shown:-translate-y-3 peer-not-placeholder-shown:bg-slate-300 px-2 peer-not-placeholder-shown:text-sm peer-focus:top-0 peer-focus:-translate-y-3 peer-focus:bg-slate-300 peer-focus:text-sm"
               >
                 Note
               </label>
@@ -326,7 +348,7 @@ export default function Dashboard() {
             </div>
             <button
               type="submit"
-              className="w-full text-secondary font-bold text-lg h-15 bg-primary rounded-lg mt-5"
+              className="w-full text-slate-100 font-b text-xl h-20 bg-primary rounded-xl mt-5"
             >
               <h1>Add Income</h1>
             </button>
@@ -527,6 +549,64 @@ export default function Dashboard() {
               <h1>Transfer</h1>
             </button>
           </form>
+        </section>
+      </Modal>
+
+      <Modal
+        styles={`fixed z-200 top-0 left-0 w-full inset-0 bg-primary/80 flex items-center justify-center p-2.5 text-primary ${OpenSubModal ? "scale-100 animation-modal-in" : "scale-o animation-modal-out"}`}
+      >
+        <button
+          type="button"
+          className="w-12.5 h-12.5 flex items-center justify-center rounded-lg absolute top-2.5 right-0 text-white"
+          onClick={() => setOpenSubModal(false)}
+        >
+          <CloseCircle size={32} />
+        </button>
+        <section className="w-full rounded-xl bg-slate-300 p-5 gap-y-6 shadow-2xl flex flex-col">
+          {banks.map((bank) => {
+            return (
+              <div className="flex items-center justify-between w-full">
+                <div className="flex items-center gap-6">
+                  <img
+                    src={ProviderIcons["bri"]}
+                    alt="BRI"
+                    className="w-12.5 h-12.5 object-cover rounded-lg"
+                  />
+                  <div className="flex flex-col">
+                    <h1>{bank.name}</h1>
+                    <h4>{bank.owner}</h4>
+                    <h4>{bank.number}</h4>
+                  </div>
+                </div>
+                <div
+                  className="grouping relative"
+                  onClick={() =>
+                    setActiveMenu(ActiveMenu === bank.id ? null : bank.id)
+                  }
+                >
+                  <div
+                    className={`${ActiveMenu === bank.id ? "bg-primary text-slate-100" : "bg-transparent text-primary"} p-2.5 rounded-lg flex items-center justify-center`}
+                  >
+                    <MoreHorizontal size={24} />
+                  </div>
+
+                  <div
+                    className={`absolute -translate-x-50 w-50 p-2.5 rounded-2xl bg-slate-100 drop-shadow-2xl ${ActiveMenu === bank.id ? "scale-100 animation-bounce" : "scale-0"}`}
+                  >
+                    <button
+                      type="button"
+                      className="w-full h-12 bg-primary text-white text-lg rounded-lg"
+                    >
+                      Jadikan Default
+                    </button>
+                    <button type="button" className="w-full h-12 text-lg">
+                      Jadikan Default
+                    </button>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
         </section>
       </Modal>
     </main>

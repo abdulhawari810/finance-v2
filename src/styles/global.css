@@ -1,20 +1,19 @@
 @import "tailwindcss";
 
-@font-face{
+@font-face {
   font-family: "bold";
   src: url("../assets/fonts/Nunito-Bold.ttf") format("truetype");
 }
-@font-face{
+@font-face {
   font-family: "medium";
   src: url("../assets/fonts/Nunito-SemiBold.ttf") format("truetype");
 }
-@font-face{
+@font-face {
   font-family: "regular";
   src: url("../assets/fonts/Nunito-Regular.ttf") format("truetype");
 }
 
-
-@theme{
+@theme {
   --font-r: "regular", sans-serif;
   --font-b: "bold", sans-serif;
   --font-m: "medium", sans-serif;
@@ -22,18 +21,21 @@
   --color-secondary: #928dab;
 }
 
-@layer base{
-  
-*{
-  transition: all .2s ease-in-out;
+@layer base {
+  * {
+    transition: all 0.2s ease-in-out;
     -webkit-tap-highlight-color: transparent;
-}
-*:focus {
+  }
+  *:focus {
     outline: none;
   }
 
-body{
-  font-family: var(--font-r);
-  background: var(--color-secondary);
+  body {
+    font-family: var(--font-r);
+    background: var(--color-secondary);
+  }
 }
+
+.react-datepicker-popper {
+  position: fixed !important;
 }

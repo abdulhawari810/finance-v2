@@ -3,7 +3,7 @@ export default function Header({ styles, title, icons }) {
     <>
       <section className={styles}>
         {icons}
-        <h1 className="text-lg font-bold">{title}</h1>
+        <h1>{title}</h1>
       </section>
     </>
   );
